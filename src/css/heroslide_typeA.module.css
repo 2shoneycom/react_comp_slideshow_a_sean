@@ -1,0 +1,150 @@
+.hero_container {
+  --primaryTextColor: #fff;
+  color: var(--primaryTextColor);
+  position: relative;
+  width: 100%;
+  /* 핵심 코드: 16:9 비율 유지 */
+  aspect-ratio: 16 / 9;
+}
+
+.hero_layer1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: linear-gradient(to top right, rgb(65, 89, 122), rgb(137, 81, 169));
+}
+
+.hero_layer2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.hero_layer2 .description_area {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.description_area .description_content_area {
+  padding: 4em;
+  max-width: 700px;
+}
+
+.description_content_area .description_content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.description_content .title {
+  font-family: var(--tertiaryHeadlineFont), Arial, Helvetica, sans-serif;
+  font-size: var(--title-1);
+  font-weight: 700;
+  line-height: 110%;
+}
+
+.description_content .details {
+  font-family: var(--bodyFont), Arial, Helvetica, sans-serif;
+  font-size: var(--description-1);
+  font-weight: 400;
+  line-height: 140%;
+}
+
+.description_content .readmore {
+  background: var(--buttonTextColor);
+  border: 1px solid var(--buttonTextColor);
+  border-radius: 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--tertiaryHeadlineFont), Arial, Helvetica, sans-serif;
+  font-size: var(--button-1);
+  font-weight: 700;
+  line-height: 110%;
+  padding: 10px 15px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hero_layer2 .navigation_area {
+  width: 100%;
+  padding: 0 4em 3em 4em;
+}
+
+.navigation_area .navigation_flex_box {
+  display: flex;
+  gap: 10px;
+}
+
+.navigation_flex_box .navigation_item_box {
+  flex: 1;
+  min-width: 0;
+}
+
+.navigation_slider {
+  width: 100%;
+  background-color: hsla(0, 0%, 95%, 0.5);
+  height: 5px;
+  position: relative;
+  overflow: hidden; 
+}
+
+/* 2. 실제로 차오르는 색상 막대 (가상 요소 or 자식 div로 구현) */
+.navigation_slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%; /* 시작은 0% */
+  background-color: #fff; /* 활성 상태 색상 (검정) */
+}
+
+/* 3. 활성화(Active) 되었을 때 실행할 애니메이션 */
+/* 6초(6s) 동안 너비가 0% -> 100%로 변함 */
+.active_slider::after {
+  animation: fillProgress 6s linear forwards;
+}
+
+/* 애니메이션 키프레임 정의 */
+@keyframes fillProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.navigation_title {
+  font-size: 1.4rem;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+
+.play_pause {
+  display: grid;
+  margin-left: 30px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, .4);
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.play_pause svg {
+  fill: currentColor;
+  grid-column: 1;
+  grid-row: 1;
+  height: 16px;
+  width: 16px;
+}
