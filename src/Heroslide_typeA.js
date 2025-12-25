@@ -6,28 +6,46 @@ function Heroslide_typeA({ data = [] }) {
   const currentSlide = data[currentIndex];
 
   const [isPlaying, setIsPlaying] = useState(true); // 재생/일시정지 상태 관리
+  const [progress, setProgress] = useState(0); // 0 ~ 100 퍼센트 상태 관리
 
   // -------------------------------------------------------
-  // 핵심 로직: 6초마다 슬라이드 넘기기
+  // 1. 타이머 로직: 단순히 progress 숫자만 올림 (순수 로직)
   // -------------------------------------------------------
-  /* todo: 로직 이해 및 지금 문제 (일시정지 누르면 아예 초기화가 되는 부분) 고치기 */
   useEffect(() => {
     let interval;
 
     if (isPlaying && data.length > 0) {
       interval = setInterval(() => {
-        setCurrentIndex((prevIndex) =>
-          // 마지막 슬라이드면 0으로, 아니면 +1
-          prevIndex === data.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 6000); // 6000ms = 6초
+        // 여기서는 오직 progress만 증가시킵니다. (다른 state 건드리지 않음)
+        setProgress((prev) => prev + (100 / (6000 / 50))); 
+      }, 50);
     }
 
-    // 정리(Cleanup) 함수:
-    // 슬라이드가 바뀌거나(currentIndex 변경), 일시정지 되거나, 컴포넌트가 사라질 때
-    // 기존 타이머를 없애줍니다. 그래야 꼬이지 않고 0초부터 다시 셉니다.
     return () => clearInterval(interval);
-  }, [isPlaying, currentIndex, data.length]);
+  }, [isPlaying, data.length]);
+
+  // -------------------------------------------------------
+  // 2. 감시자 로직: progress가 100이 되면 슬라이드 넘김
+  // -------------------------------------------------------
+  useEffect(() => {
+    if (progress >= 100) {
+      // 1. 슬라이드 넘기기
+      setCurrentIndex((prevIndex) => 
+        prevIndex === data.length - 1 ? 0 : prevIndex + 1
+      );
+      // 2. 게이지 초기화
+      setProgress(0);
+    }
+  }, [progress, data.length]); // progress가 변할 때마다 검사
+
+  // -------------------------------------------------------
+  // 3. 수동 조작 핸들러
+  // -------------------------------------------------------
+  const handleSlideClick = (index) => {
+    setCurrentIndex(index);
+    setProgress(0); // 사용자가 직접 누르면 게이지 0부터 다시 시작
+    // 사용자 클릭 시 일시정지를 풀고 싶다면 setIsPlaying(true) 추가
+  };
 
   return (
     <div className={styles.hero_container}>
@@ -64,13 +82,18 @@ function Heroslide_typeA({ data = [] }) {
               <div
                 key={item.id}
                 className={styles.navigation_item_box}
-                // 클릭하면 해당 인덱스로 변경
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => handleSlideClick(index)}
                 // (선택) 현재 활성화된 슬라이드면 스타일 다르게 주기
                 style={{ opacity: index === currentIndex ? 1 : 0.5, cursor: 'pointer' }}
               >
-                <div className={`${styles.navigation_slider} ${index === currentIndex && isPlaying ? styles.active_slider : ''}`}>
-                  {/* CSS ::after 가상요소로 애니메이션이 작동합니다 */}
+                <div className={styles.navigation_slider}>
+                  {/* 현재 슬라이드일 때만 progress 값을 적용, 아니면 0% */}
+                  <div
+                    className={styles.progress_bar}
+                    style={{
+                      width: index === currentIndex ? `${progress}%` : '0%'
+                    }}
+                  ></div>
                 </div>
                 <div className={styles.navigation_title}>{item.title}</div>
               </div>

@@ -98,27 +98,11 @@
   overflow: hidden; 
 }
 
-/* 2. 실제로 차오르는 색상 막대 (가상 요소 or 자식 div로 구현) */
-.navigation_slider::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+.progress_bar {
   height: 100%;
-  width: 0%; /* 시작은 0% */
-  background-color: #fff; /* 활성 상태 색상 (검정) */
-}
-
-/* 3. 활성화(Active) 되었을 때 실행할 애니메이션 */
-/* 6초(6s) 동안 너비가 0% -> 100%로 변함 */
-.active_slider::after {
-  animation: fillProgress 6s linear forwards;
-}
-
-/* 애니메이션 키프레임 정의 */
-@keyframes fillProgress {
-  from { width: 0%; }
-  to { width: 100%; }
+  background-color: #fff; /* 채워지는 색상 */
+  width: 0%; /* 이 부분은 JS가 제어합니다 */
+  transition: width 0.1s linear; /* 부드럽게 이어지도록 설정 */
 }
 
 .navigation_title {
