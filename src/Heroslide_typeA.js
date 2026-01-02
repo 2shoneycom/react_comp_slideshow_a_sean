@@ -17,8 +17,8 @@ function Heroslide_typeA({ data = [] }) {
     if (isPlaying && data.length > 0) {
       interval = setInterval(() => {
         // 여기서는 오직 progress만 증가시킵니다. (다른 state 건드리지 않음)
-        setProgress((prev) => prev + (100 / (6000 / 50))); 
-      }, 50);
+        setProgress((prev) => prev + (100 / (6000 / 10))); 
+      }, 10);
     }
 
     return () => clearInterval(interval);

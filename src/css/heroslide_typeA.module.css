@@ -137,8 +137,9 @@
   /* 채워지는 색상 */
   width: 0%;
   /* 이 부분은 JS가 제어합니다 */
-  transition: width 0.1s linear;
-  /* 부드럽게 이어지도록 설정 */
+  
+  /* transition: width 0.1s linear;
+  부드럽게 이어지도록 설정 */
 }
 
 .navigation_title {
